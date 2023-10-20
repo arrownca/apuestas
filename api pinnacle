@@ -1,1 +1,29 @@
+import requests
 
+def obtener_cuotas(casa, evento):
+    # Hacer una solicitud a la API de la casa de apuestas para obtener las cuotas
+    response = requests.get(f'https://api.casadeapuestas.com/cuotas/{evento}')
+    
+    if response.status_code == 200:
+        data = response.json()
+        cuotas = data['cuotas']
+        return cuotas
+    else:
+        print(f'Error al obtener cuotas de {casa}. Código de estado: {response.status_code}')
+        return None
+
+def comparar_cuotas(casa1, cuota1, casa2, cuota2):
+    if cuota1 > cuota2:
+        print(f"La cuota en {casa1} es mayor: {cuota1}")
+    elif cuota1 < cuota2:
+        print(f"La cuota en {casa2} es mayor: {cuota2}")
+    else:
+        print("Las cuotas son iguales")
+
+# Ejemplo de uso
+evento = 'partido_ejemplo'
+cuotas_casa1 = obtener_cuotas('Casa1', evento)
+cuotas_casa2 = obtener_cuotas('Casa2', evento)
+
+if cuotas_casa1 is not None and cuotas_casa2 is not None:
+    comparar_cuotas('Casa1', cuotas_casa1['cuota'], 'Casa2', cuotas_casa2['cuota'])
