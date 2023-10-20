@@ -1,0 +1,28 @@
+import requests
+
+API_KEY = 'TU_API_KEY'  # Reemplaza con tu propia API key de Pinnacle
+
+def obtener_cambios_de_cuotas():
+    url = 'https://api.pinnacle.com/v1/odds'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        cambios_cuotas = response.json()
+        return cambios_cuotas
+    else:
+        print(f'Error al obtener los cambios de cuotas. Código de estado: {response.status_code}')
+        return None
+
+# Llamada a la función para obtener los cambios de cuotas
+cambios_cuotas = obtener_cambios_de_cuotas()
+
+# Imprimir los cambios de cuotas
+if cambios_cuotas is not None:
+    for evento in cambios_cuotas:
+        print(f"Evento: {evento['home_team']} vs {evento['away_team']}")
+        for cuota in evento['periods'][0]['moneyline']:
+            print(f"Tipo de apuesta: {cuota['moneyline_type']}, Cuota: {cuota['moneyline_odds']}")
